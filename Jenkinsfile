@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
-        DOCKER_IMAGE_NAME = "willbla/train-schedule"
+        DOCKER_IMAGE_NAME = "daneshrao/jenkins"
     }
     stages {
         stage('Build') {
@@ -58,14 +58,14 @@ pipeline {
                 branch 'master'
             }
             environment { 
-                CANARY_REPLICAS = 0
+                CANARY_REPLICAS = 1
             }
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
+                    configs: 'train-schedule-canary.yml',
                     enableConfigSubstitution: true
                 )
                 kubernetesDeploy(
